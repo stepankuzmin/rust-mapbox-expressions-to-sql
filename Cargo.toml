@@ -1,0 +1,17 @@
+[package]
+name = "mapbox-expressions-to-sql"
+version = "0.1.0"
+description = "Iron router with regex captures support."
+authors = ["Stepan Kuzmin <to.stepan.kuzmin@gmail.com>"]
+license = "MIT"
+documentation = "https://docs.rs/mapbox-expressions-to-sql"
+homepage = "https://github.com/stepankuzmin/rust-mapbox-expressions-to-sql"
+repository = "https://github.com/stepankuzmin/rust-mapbox-expressions-to-sql"
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "stepankuzmin/rust-mapbox-expressions-to-sql" }
+
+[dependencies]
+serde_json = "1.0"
+lazy_static = "1.0"
