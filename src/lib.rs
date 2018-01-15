@@ -84,27 +84,39 @@ pub fn to_sql(expression: &Value) -> Result<String, Error> {
         return match expression.clone() {
             Value::String(str) => Ok(format!("'{}'", str)),
             _ => {
-                let operand: String = serde_json::to_string(&expression).unwrap();
+                let operand: String = serde_json::to_string(&expression)?;
                 Ok(operand)
             }
         };
     }
 
     let array = expression.as_array().unwrap().as_slice();
-    let (operator, operands) = array.split_first().unwrap();
+    let (operator, operands) = match array.split_first() {
+        Some((operator, operands)) => {
+            if operator.is_string() {
+                (operator.as_str().unwrap(), operands)
+            } else {
+                return Err(Error::UnknownOperator(operator.to_string()))
+            }
+        },
+        None => return Err(Error::NoOperands)
+    };
     
-    let f = OPERATORS.get(operator.as_str().unwrap()).unwrap();
+    let f = match OPERATORS.get(operator) {
+        Some(f) => f,
+        None => return Err(Error::UnknownOperator(operator.to_string()))
+    };
 
     let str_operands: Vec<String> = operands
         .into_iter()
-        .map(|operand| to_sql(operand).unwrap())
+        .filter_map(|operand| to_sql(operand).ok())
         .collect();
 
     Ok(f(str_operands))
 }
 
 pub fn parse(expression: &str) -> Result<String, Error> {
-    let value: Value = serde_json::from_str(expression).unwrap();
+    let value: Value = serde_json::from_str(expression)?;
     to_sql(&value)
 }
 

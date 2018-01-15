@@ -1,16 +1,14 @@
-// use std::fmt;
-// use std::option::NoneError;
-// use std::error::Error as StdError;
-use serde_json::Error as SerdeJsonError;
+use serde_json;
 
 #[derive(Debug)]
 pub enum Error {
-    SerdeJsonError,
-    ParseError(String)
+    Json(serde_json::Error),
+    UnknownOperator(String),
+    NoOperands
 }
 
-impl From<SerdeJsonError> for Error {
-  fn from(_error: SerdeJsonError) -> Self {
-    Error::ParseError(String::from("Can't parse JSON"))
-  }
+impl From<serde_json::Error> for Error {
+    fn from(error: serde_json::Error) -> Error {
+        Error::Json(error)
+    }
 }
