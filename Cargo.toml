@@ -1,5 +1,5 @@
 [package]
-name = "mapbox-expressions-to-sql"
+name = "mapbox_expressions_to_sql"
 version = "0.1.0"
 description = "Iron router with regex captures support."
 authors = ["Stepan Kuzmin <to.stepan.kuzmin@gmail.com>"]
