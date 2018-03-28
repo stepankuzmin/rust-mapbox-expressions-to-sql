@@ -96,15 +96,15 @@ pub fn to_sql(expression: &Value) -> Result<String, Error> {
             if operator.is_string() {
                 (operator.as_str().unwrap(), operands)
             } else {
-                return Err(Error::UnknownOperator(operator.to_string()))
+                return Err(Error::UnknownOperator(operator.to_string()));
             }
-        },
-        None => return Err(Error::NoOperands)
+        }
+        None => return Err(Error::NoOperands),
     };
-    
+
     let f = match OPERATORS.get(operator) {
         Some(f) => f,
-        None => return Err(Error::UnknownOperator(operator.to_string()))
+        None => return Err(Error::UnknownOperator(operator.to_string())),
     };
 
     let str_operands: Vec<String> = operands
@@ -134,17 +134,32 @@ mod tests {
     fn test_comparison() {
         assert_eq!(parse(r#"["==", "key", 42]"#).unwrap(), r#"key = 42"#);
         assert_eq!(parse(r#"["==", "key", "value"]"#).unwrap(), "key = 'value'");
-        assert_eq!(parse(r#"["!=", "key", "value"]"#).unwrap(), "key <> 'value'");
+        assert_eq!(
+            parse(r#"["!=", "key", "value"]"#).unwrap(),
+            "key <> 'value'"
+        );
         assert_eq!(parse(r#"[">", "key", "value"]"#).unwrap(), "key > 'value'");
-        assert_eq!(parse(r#"[">=", "key", "value"]"#).unwrap(), "key >= 'value'");
+        assert_eq!(
+            parse(r#"[">=", "key", "value"]"#).unwrap(),
+            "key >= 'value'"
+        );
         assert_eq!(parse(r#"["<", "key", "value"]"#).unwrap(), "key < 'value'");
-        assert_eq!(parse(r#"["<=", "key", "value"]"#).unwrap(), "key <= 'value'");
+        assert_eq!(
+            parse(r#"["<=", "key", "value"]"#).unwrap(),
+            "key <= 'value'"
+        );
     }
-    
+
     #[test]
     fn test_set_membership() {
-        assert_eq!(parse(r#"["in", "key", "v0", "v1", "v2"]"#).unwrap(), "key IN ('v0', 'v1', 'v2')");
-        assert_eq!(parse(r#"["!in", "key", "v0", "v1", "v2"]"#).unwrap(), "key NOT IN ('v0', 'v1', 'v2')");
+        assert_eq!(
+            parse(r#"["in", "key", "v0", "v1", "v2"]"#).unwrap(),
+            "key IN ('v0', 'v1', 'v2')"
+        );
+        assert_eq!(
+            parse(r#"["!in", "key", "v0", "v1", "v2"]"#).unwrap(),
+            "key NOT IN ('v0', 'v1', 'v2')"
+        );
     }
 
     #[test]

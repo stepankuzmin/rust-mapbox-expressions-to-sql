@@ -4,7 +4,7 @@ use serde_json;
 pub enum Error {
     Json(serde_json::Error),
     UnknownOperator(String),
-    NoOperands
+    NoOperands,
 }
 
 impl From<serde_json::Error> for Error {
